@@ -101,10 +101,8 @@ void init(void)
   #if defined(PLATFORM_MACOS) && defined(RELEASE)
   String res_path = os_path_to_executable(str("undeadwest"));
   res_path = str_concat(res_path, str("../Resources/res"), &game.frame_arena);
-  #elif defined(PLATFORM_WINDOWS) && defined(RELEASE)
-  String res_path = str("res");
   #else
-  String res_path = str("../res");
+  String res_path = str("res");
   #endif
 
   global.window.width = sapp_width();

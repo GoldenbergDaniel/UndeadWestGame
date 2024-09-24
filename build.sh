@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-SRC="src/main.c"
+SRC="main.c"
 OUT="undeadwest"
 
 MODE="dev"
@@ -22,30 +22,17 @@ if [[ $MODE == "dev"     ]]; then WFLAGS="-Wpedantic -Wno-initializer-overrides"
 if [[ $MODE == "debug"   ]]; then WFLAGS="-Wall -Wpedantic -Wno-initializer-overrides -Wno-missing-braces"; fi
 if [[ $MODE == "release" ]]; then WFLAGS="-Wno-initializer-overrides"; fi
 
-if [[ $TARGET == "darwin_amd64" ]]; then LFLAGS="-I../extern/ -L../extern/sokol/lib -lsokol -framework OpenGL -framework Cocoa"; fi
-if [[ $TARGET == "linux_amd64"  ]]; then LFLAGS="-I../extern/ -L../extern/sokol/lib -lsokol"; fi
+if [[ $TARGET == "darwin_amd64" ]]; then LFLAGS="-Iextern/ -Lextern/sokol/lib/ -lsokol -framework OpenGL -framework Cocoa"; fi
+if [[ $TARGET == "linux_amd64"  ]]; then LFLAGS="-Iextern/ -Lextern/sokol/lib/ -lsokol"; fi
 
+echo "[source:$SRC]"
+echo "[target:$TARGET]"
 echo "[mode:$MODE]"
 if [[ $2 == "fsan" ]]; then echo "[fsan:on]"; fi
 if [[ $2 != "fsan" ]]; then echo "[fsan:off]"; fi
-
-# echo "- Processing -"
 # shadertoh src/shaders/ src/render/shaders.h
 
-BUILD="0"
-if [[ $MODE == "dev" || $MODE == "debug" || $MODE == "release" ]]; then BUILD="1"; fi
-
-RUN="0"
-if [[ $MODE == "dev" ]]; then RUN="1"; fi
-
 # -target arm64-apple-macos14
-if [[ $BUILD == "1" ]]
-then
-  echo "- Building -"
-  echo $SRC
-  if [[ ! -d "build" ]]; then mkdir build; fi
-  pushd build
-    cc $CFLAGS $WFLAGS $FSAN $LFLAGS ../$SRC -o $OUT
-    if [[ $RUN == "1" ]]; then ./$OUT; fi
-  popd
-fi
+if [[ ! -d "out" ]]; then mkdir out; fi
+cc $CFLAGS $WFLAGS $FSAN $LFLAGS src/$SRC -o out/$OUT
+if [[ $MODE == "dev" ]]; then out/$OUT; fi
