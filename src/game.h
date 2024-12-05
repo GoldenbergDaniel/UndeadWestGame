@@ -4,7 +4,7 @@
 #include "input.h"
 #include "entity.h"
 
-#ifdef _WIN32
+#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_LINUX)
 #define TIME_STEP (1.0f / 120)
 #define ANIM_TICK 1
 #else
@@ -115,12 +115,13 @@ struct Game
   f64 t;
   f64 dt;
   Mat3x3F camera;
+
   bool should_quit;
   bool is_so_over;
   bool won;
-  
   bool is_grace_period;
   bool wave_just_began;
+  
   Timer grace_period_timer;
   Timer spawn_timer;
   f64 time_alive;

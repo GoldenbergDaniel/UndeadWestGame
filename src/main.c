@@ -1,4 +1,4 @@
-#if defined(_WIN32)
+#if defined(PLATFORM_WINDOWS)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #undef near
@@ -8,6 +8,7 @@
 #endif
 
 #include <stdlib.h>
+#include "glad/glad.c"
 
 #ifdef PLATFORM_WINDOWS
 #define SOKOL_IMPL
@@ -88,13 +89,13 @@ void init(void)
 
   game.entity_arena = create_arena(GiB(1), FALSE);
   game.frame_arena = create_arena(GiB(1), TRUE);
-  game.draw_arena = create_arena(MiB(16), TRUE);
+  game.draw_arena = create_arena(MiB(16), FALSE);
   
   stm_setup();
   srand((u32) stm_now());
   get_scratch_arena(NULL);
 
-  #if defined(_WIN32)
+  #if defined(PLATFORM_WINDOWS) || defined(PLATFORM_LINUX)
   gladLoadGL();
   #endif
 

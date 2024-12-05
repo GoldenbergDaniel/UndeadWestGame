@@ -109,7 +109,8 @@ u64 os_get_page_size(void)
   #endif
 
   #ifdef PLATFORM_UNIX
-  result = getpagesize();
+  // result = getpagesize();
+  result = 4096;
   #endif
 
   return result;
